@@ -1,0 +1,34 @@
+<head>
+  <title>capntrade</title>
+</head>
+
+<body>
+  {{> home}}
+  {{> newGoal}}
+  {{> goals}}
+</body>
+
+<template name="home">
+  <h1>{{greeting}}</h1>
+  {{subtitle}}
+</template>
+
+<template name="newGoal">
+  <div id="newGoalDetails">
+    <label>Goal name</label>
+    <input id="newGoalName" type="text" placeholder="Goal name"/>
+    <label>Points</label>
+    {{#each pointOptions}}
+      <input type="radio" name="points" value="{{pointValue}}">{{pointValue}}</input>
+    {{/each}}
+    <button id="creategoal" class="btn btn-primary">Save</button><button id="cancelgoal" class="btn btn-primary">Cancel</button>
+  </div>
+  <button id="shownewgoal" class="btn btn-primary">Create Goal</button>
+</template>
+    
+<template name="goals">
+  {{#each myGoals}}
+    <div>{{name}} - {{points}} - {{startDate}}</div>
+  {{/each}}
+</template>
+
