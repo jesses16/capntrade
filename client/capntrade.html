@@ -3,32 +3,194 @@
 </head>
 
 <body>
-  {{> home}}
-  {{> newGoal}}
-  {{> goals}}
+	<div id="fb-root"></div>
+  {{loginButtons}}
+  {{> header}}
+  {{> myGoals}}
+  {{> friendsGoals}}
+  {{> about}}
+  {{> footer}}
 </body>
 
-<template name="home">
-  <h1>{{greeting}}</h1>
-  {{subtitle}}
+<template name="friends">
+  {{friendList}}
 </template>
 
-<template name="newGoal">
-  <div id="newGoalDetails">
-    <label>Goal name</label>
-    <input id="newGoalName" type="text" placeholder="Goal name"/>
-    <label>Points</label>
-    {{#each pointOptions}}
-      <input type="radio" name="points" value="{{pointValue}}">{{pointValue}}</input>
-    {{/each}}
-    <button id="creategoal" class="btn btn-primary">Save</button><button id="cancelgoal" class="btn btn-primary">Cancel</button>
-  </div>
-  <button id="shownewgoal" class="btn btn-primary">Create Goal</button>
+<template name="header">
+	<header class="header hero-unit">
+	  <h1>Cap 'N' Trade</h1>
+	  <h4><em>It's time to cap 'n' trade your goals</em></h4>
+	  <div class="well">
+	    Create a goal for yourself and choose a coach, manage the goals your coaching, and trade with your friends!
+	    How high can you get your coach rating?
+	  </div>
+	  <ul class="nav nav-pills">
+	    <li class="active"><a href="">Participant</a></li>
+	    <li><a href="">Coach</a></li>
+	  </ul>
+	</header>
+</template>
+
+<template name="myGoals">
+  <section>
+    <header>
+      <h1 class="sect-head bg-grass">My Goals!</h1>
+      </header>
+      <div class="row">
+      <div class="span11">
+        <div class="row">
+          <button id="newGoalButton" class="btn btn-success span4"><h2>Create a new goal</h2></button>
+            {{> newGoal}}
+        </div>
+        {{> goals}}
+      </div>
+    </div>
+  </section>
+</template>
+
+<template name="friendsGoals">
+  <section>
+    <header>
+      <h1 class="sect-head bg-sky">Goals I Manage</h1>
+    </header>
+    <div class="row">
+      <div class="span11">
+        {{> coachedGoals}}
+      </div>
+    </div>
+  </section>
 </template>
     
 <template name="goals">
   {{#each myGoals}}
-    <div>{{name}} - {{points}} - {{startDate}}</div>
+    <hr class="soften">
+    <div class="row">
+      <header>
+        <img class="span2" src="http://placehold.it/150x150">
+        <aside class="span3">
+          <h2>{{name}}</h2>
+          <em>posted by Anon on {{timestamp}}</em>
+          <p class="tp">{{description}}</p>
+        </aside>
+        <div class="span5 offset1">
+          <h4>Recent Updates</h4>
+          <hr class="soften hr-thin">
+          <span>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</span> - 
+          <em><b>posted by Anon on 1st January, 2012</b></em>
+          <hr class="soften hr-thin">
+          <a href="#">Show more...</a><br/>
+          <hr class="soften hr-thin">
+          <input type="text" placeholder="Submit an update to this goal">
+        </div>
+      </header>
+    </div>
   {{/each}}
+</template>
+
+<template name="coachedGoals">
+  {{#each coachedGoalSet}}
+    <hr class="soften">
+    <div class="row">
+      <header>
+        <img class="span2" src="http://placehold.it/150x150">
+        <aside class="span3">
+          <h2>{{name}}</h2>
+          <em>posted by Anon on {{timestamp}}</em>
+          <p class="tp">{{description}}</p>
+        </aside>
+        <div class="span5 offset1">
+          <h4>Recent Updates</h4>
+          <hr class="soften hr-thin">
+          <span>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</span> - 
+          <em><b>posted by Anon on 1st January, 2012</b></em>
+          <hr class="soften hr-thin">
+          <a href="#">Show more...</a><br/>
+          <hr class="soften hr-thin">
+          <input type="text" placeholder="Submit an update to this goal">
+        </div>
+      </header>
+    </div>
+  {{/each}}
+</template>
+
+<template name="newGoal">
+	<div id="newGoalForm" class="span11">
+        <div class="contact-form span5 well">
+          <fieldset>
+            <div class="rowElem">
+              <input id="name" type="text" placeholder="Goal name"/>
+            </div>
+            <div class="rowElem">
+              <input id="description" type="text" placeholder="Goal description"/>
+            </div>
+            <label class="inline">Points</label>
+            <select id="points">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>5</option>
+              <option>8</option>
+            </select>
+			<a href="#FBFriendModal" role="button" class="btn" data-toggle="modal">Choose a Coach</a>
+				{{> friendSetLink}}
+
+            <button id="creategoal" class="btn btn-primary button-space">Save</button><button id="cancelgoal" class="btn btn-primary button-space">Cancel</button>
+          </fieldset>
+        </div>
+      </div>
+</template>
+
+<template name="friendSetLink">
+	<div id="FBFriendModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    <h3 id="myModalLabel">Choose a coach</h3>
+	  </div>
+	  <div class="modal-body">
+	    <!-- {{> friendList}} -->
+	  </div>
+	  <div class="modal-footer">
+	    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	    <button class="btn btn-primary">Save changes</button>
+	  </div>
+	</div>
+</template>
+
+<!-- <template name="friendList">
+	{{#each friends}}
+	<div id="FBFriendList">{{name}}</div>
+	{{/each}}
+</template> -->
+
+<template name="about">
+  <section>
+    <header>
+      <h1 class="sect-head bg-peach">How it Works</h1>
+    </header>
+    <div class="row">
+      <div class="span5">
+        <h2>GoalTrader</h2>
+        <p>GoalTrader lets you set personal goals, commonly in the area of personal wellness, philanthropy and charity, finance, career, and more.</p>
+        <p>Once you've created and priced a goal, put it up for auction with your friends.  They'll help you meet your goal, and you'll both earn credits when a goal is completed.</p>
+        <p>The catch... Goals can be bought, sold & traded to maximize credits.  Like with everything else in life, the player with the most wins.</p>
+      </div>
+    </div>
+  </section>
+</template>
+      
+<template name="footer">
+  <footer class="footer">
+    <div class="row">
+      <div class="span5 offset1">
+        <h1>column 1</h1>
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.</p>
+        <h4>&copy; Azure 2012</h4>
+      </div>
+      <div class="span5">
+        <h1>column 2</h1>
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.</p>
+      </div>
+    </div>
+  </footer>
 </template>
 

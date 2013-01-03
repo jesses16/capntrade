@@ -6,3 +6,7 @@
 autopublish
 insecure
 preserve-inputs
+bootstrap
+accounts-facebook
+accounts-ui
+accounts-password
