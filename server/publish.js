@@ -13,6 +13,11 @@ Goals = new Meteor.Collection("goals");
 //           timestamp: Date}
 Goals = new Meteor.Collection("comments");
 
+//			 fb_id: Number,
+//			 full_name: String,
+//           image_url: String}
+FBData = new Meteor.Collection("fbdata");
+
 Meteor.publish("userData", function () {
     return Meteor.users.find({_id: this.userId},
         {fields: {'services': 1, 'createdAt': 1}});
