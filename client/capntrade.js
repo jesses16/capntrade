@@ -38,6 +38,17 @@ if (Meteor.isClient) {
 	  };
     },
 
+	'click #FBFriendListButton' : function() {
+		FB.ui({method: 'apprequests',
+		    message: 'Will you be my coach?',
+			title: 'Select a Coach',
+			max_recipients: 1
+		}, function(FB_response) {
+			console.log("facebook response!!!");
+			console.log(FB_response);
+		});
+	},
+
     'click #creategoal' : function () {
       d = new Date();
       Goals.insert({
