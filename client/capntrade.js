@@ -2,44 +2,38 @@
 
 // Define Minimongo collections to match server/publish.js.
 Goals = new Meteor.Collection("goals");
+Services = new Meteor.Collection("services");
+
+Meteor.autosubscribe(function () {
+  Meteor.subscribe("userData");
+});
 
 if (Meteor.isClient) {
 
   Template.goals.myGoals = function() {
-    return Goals.find({owner: Meteor.user()._id});
+	if (Meteor.user()) {
+    	return Goals.find({owner: Meteor.userId()});
+	}
   };
 
   Template.coachedGoals.coachedGoalSet = function() {
-    return Goals.find({ coaches: { $in:  [Meteor.user()._id] }});
+	if (Meteor.user()) {
+    	return Goals.find({ coaches: { $in:  [Meteor.userId()] }});
+	}
   };
 
   Template.newGoal.pointOptions = function() {
     return [{pointValue:1},{pointValue:2},{pointValue:3},{pointValue:5},{pointValue:8}];
   };
-	// 
-	//   Template.newGoal.friendSet = function() {
-	// console.log("getting friend list!");
-	// if (typeof FB != 'undefined') {
-	// 	console.log("2");
-	// 	FB.api('/me', function(response) {
-	// 		alert('Your name is ' + response.name);
-	// 	});
-	// };
-	//   };
 
   Template.myGoals.events({
     'click #newGoalButton' : function () {
-      // template data, if any, is available in 'this'
       $('#newGoalForm').toggle();
       if (typeof FB != 'undefined') {
-		FB.api('/me', function(response) {
-			// Template.friendSet({friends: [{name: response.name}] });
-			//Meteor.render( Template.friendSet({friends: [{name: response.name}] }) );
-//			console.log(Template.friendList({friends: [{name: response.name}] }));
-//		    $('#FBFriendList').val(Template.friendList({friends: [{name: response.name}] }) );
-			// 			  console.log("sadfasdf - " +  Template.friendSet({friends: [{name: response.name}] }) );
-			// 			  return Template.alert({friends: [{name: response.name}] });
-			// 			});
+		var fb_oauth_token = Meteor.user().services.facebook.accessToken
+		FB.api('/me/friends?access_token=' + fb_oauth_token + '&fields=name,id,picture', function(response) {
+			var facebook_content = Template.friendList(response);
+			$('#friendListModal').html(facebook_content);
 		});
 	  };
     },
@@ -49,7 +43,7 @@ if (Meteor.isClient) {
       Goals.insert({
         name: $('#newGoalForm #name').val(),
 		description: $('#newGoalForm #description').val(),
-		owner: Meteor.user()._id,
+		owner: Meteor.userId(),
         startDate: d,
         points: $('#newGoalForm #points').val()
       });

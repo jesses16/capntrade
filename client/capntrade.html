@@ -12,10 +12,6 @@
   {{> footer}}
 </body>
 
-<template name="friends">
-  {{friendList}}
-</template>
-
 <template name="header">
 	<header class="header hero-unit">
 	  <h1>Cap 'N' Trade</h1>
@@ -146,8 +142,7 @@
 	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 	    <h3 id="myModalLabel">Choose a coach</h3>
 	  </div>
-	  <div class="modal-body">
-	    <!-- {{> friendList}} -->
+	  <div id="friendListModal" class="modal-body">
 	  </div>
 	  <div class="modal-footer">
 	    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -156,11 +151,11 @@
 	</div>
 </template>
 
-<!-- <template name="friendList">
-	{{#each friends}}
+<template name="friendList">
+	{{#each data}}
 	<div id="FBFriendList">{{name}}</div>
 	{{/each}}
-</template> -->
+</template>
 
 <template name="about">
   <section>

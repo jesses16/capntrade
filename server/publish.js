@@ -13,8 +13,7 @@ Goals = new Meteor.Collection("goals");
 //           timestamp: Date}
 Goals = new Meteor.Collection("comments");
 
-// Publish all items for requested list_id.
-Meteor.publish('goals', function () {
-  return Todos.find();
+Meteor.publish("userData", function () {
+    return Meteor.users.find({_id: this.userId},
+        {fields: {'services': 1, 'createdAt': 1}});
 });
-
