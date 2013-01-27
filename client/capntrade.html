@@ -10,7 +10,8 @@
   {{> coach}}
   {{> about}}
   {{> footer}}
-  {{> acceptRequestModalHidden}}
+  {{> facebookRequestRedirectTemplate}}
+  {{> facebookRequestModalTemplate}}
 </body>
 
 <!-- HEADER -->
@@ -61,6 +62,9 @@
     </header>
     <div class="row">
       <div class="span11">
+		<div class="row">
+          <button type="button" class="btn btn-success span4" data-toggle="modal" data-target="#acceptRequestModal"><h2>See Coach Requests</h2></button>
+        </div>
         {{> coachedGoals}}
       </div>
     </div>
@@ -138,22 +142,40 @@
   {{/each}}
 </template>
 
-<template name="acceptRequestModalHidden">
-	{{#each requestInfo}}
+<template name="facebookRequestModalTemplate">
 	<div id="acceptRequestModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	  <div class="modal-header">
 	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 	    <h3 id="myModalLabel">Goal Coach Request</h3>
 	  </div>
 	  <div class="modal-body">
-	    <p>You have been requested by <em>{{playerName}}</em> to be a coach for the goal: <em>{{goalName}}</em></p>
+		{{#each requestInfo}}
+	    	<p>You have been requested by <em>{{playerName}}</em> to be a coach for the goal: <em>{{goalName}}</em></p>
+		{{/each}}
 	  </div>
 	  <div class="modal-footer">
 	    <button class="btn" data-dismiss="modal" aria-hidden="true">I am not coach material</button>
 	    <button class="btn btn-primary">Accept!</button>
 	  </div>
 	</div>
-	{{/each}}
+</template>
+
+<template name="facebookRequestRedirectTemplate">
+	<div id="facebookRequestRedirectModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    <h3 id="myModalLabel">Goal Coach Request</h3>
+	  </div>
+	  <div class="modal-body">
+		{{#each requestInfo}}
+	    	<p>You have been requested by <em>{{playerName}}</em> to be a coach for the goal: <em>{{goalName}}</em></p>
+		{{/each}}
+		<p>To begin coaching for goals, close this window, log in with your facebook credentials and go to the coaching section to accept the requests!</p>
+	  </div>
+	  <div class="modal-footer">
+	    <button class="btn btn-primary" data-dismiss="modal">Sounds good!</button>
+	  </div>
+	</div>
 </template>
 
 <template name="newGoal">

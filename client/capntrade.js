@@ -18,25 +18,44 @@ if (Meteor.isClient) {
 			var request_id = (RegExp('request_ids' + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
 			if (request_id) {
 				Session.set('activeFBRequestId', request_id);
-				window.setTimeout( function() { $('#acceptRequestModal').modal(); } ,1000);
-				console.log("go!");
+				window.setTimeout( function() { $('#facebookRequestRedirectModal').modal(); }, 1000);
 			}
 		});
 	}();
 	
-  // Template.acceptRequestModalHidden.preserve('#acceptRequestModal');
-	
-  Template.acceptRequestModalHidden.requestInfo = function() {
-	var FBRequestId = Session.get('activeFBRequestId');
-	var user;
-	var goal = Goals.findOne({coach_fb_request_id: FBRequestId});
-	if (goal) {
-		console.log(goal);
-		user = Meteor.users.findOne({_id: goal.owner}).profile.name		
-		console.log(user);
-		return [{ playerName: user,
-				 goalName: goal.name }];
+	Template.facebookRequestRedirectTemplate.requestInfo = function() {
+		var requestResponse = []
+		var FBRequestId = Session.get('activeFBRequestId');
+		var request_goal = Goals.findOne({coach_fb_request_id: FBRequestId});
+		if (request_goal) {
+			var all_request_goals = Goals.find({coach_fb_id: request_goal.coach_fb_id})
+
+			all_request_goals.forEach(function(goal) {
+				user = Meteor.users.findOne({_id: goal.owner}).profile.name
+				requestResponse.push( {
+					playerName: user,
+					goalName: goal.name
+				});
+			});
+		}
+		return requestResponse;
+	  }
+		
+  Template.facebookRequestModalTemplate.requestInfo = function() {
+	var requestResponse = []
+	if (Meteor.user() && Meteor.user().services) {
+		var userFacebookId = Meteor.user().services.facebook.id;
+		var all_request_goals = Goals.find({coach_fb_id: userFacebookId})
+
+		all_request_goals.forEach(function(goal) {
+			user = Meteor.users.findOne({_id: goal.owner}).profile.name
+			requestResponse.push( {
+				playerName: user,
+				goalName: goal.name
+			});
+		});
 	}
+	return requestResponse;
   }
 	
   Template.goals.myGoals = function() {
@@ -75,7 +94,6 @@ if (Meteor.isClient) {
 	    title: 'Select a Coach',
 		max_recipients: 1
 	  	}, function(FB_response) {
-			console.log(FB_response);
 			
 			if (FB_response) {
 				var coach_name;
