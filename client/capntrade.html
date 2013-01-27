@@ -7,10 +7,13 @@
   {{loginButtons}}
   {{> header}}
   {{> myGoals}}
-  {{> friendsGoals}}
+  {{> coach}}
   {{> about}}
   {{> footer}}
+  {{> acceptRequestModalHidden}}
 </body>
+
+<!-- HEADER -->
 
 <template name="header">
 	<header class="header hero-unit">
@@ -27,6 +30,9 @@
 	</header>
 </template>
 
+<!-- /HEADER -->
+
+<!-- MY GOALS MODULE -->
 <template name="myGoals">
   <section>
     <header>
@@ -44,7 +50,11 @@
   </section>
 </template>
 
-<template name="friendsGoals">
+<!-- /MY GOALS MODULE -->
+
+<!-- COACH MODULE -->
+
+<template name="coach">
   <section>
     <header>
       <h1 class="sect-head bg-sky">Goals I Manage</h1>
@@ -56,6 +66,10 @@
     </div>
   </section>
 </template>
+
+<!-- /COACH MODULE -->
+
+<!-- GOAL ROW -->
     
 <template name="goals">
   {{#each myGoals}}
@@ -67,6 +81,8 @@
           <h2>{{name}}</h2>
           <em>posted by Anon on {{timestamp}}</em>
           <p class="tp">{{description}}</p>
+          <hr class="soften hr-thin">
+		  <h6>Coached By</h6>
 		  <p class="fb_picture_profile">{{> FBPictureProfile}}</p>
         </aside>
         <div class="span5 offset1">
@@ -84,9 +100,17 @@
   {{/each}}
 </template>
 
+	<!-- FB PICTURE PROFILE -->
+
 <template name="FBPictureProfile">
-	<img src={{fb_data_image coach_fb_id}}></img><p>{{fb_data_name coach_fb_id}}</p><p>Request status...</p>
+	<img src={{fb_data_image coach_fb_id}}></img><p>{{coach_fb_name}}</p><p>Request status...</p>
 </template>
+
+	<!-- /FB PICTURE PROFILE -->
+
+<!-- /GOAL ROW -->
+
+
 
 <template name="coachedGoals">
   {{#each coachedGoalSet}}
@@ -112,6 +136,24 @@
       </header>
     </div>
   {{/each}}
+</template>
+
+<template name="acceptRequestModalHidden">
+	{{#each requestInfo}}
+	<div id="acceptRequestModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    <h3 id="myModalLabel">Goal Coach Request</h3>
+	  </div>
+	  <div class="modal-body">
+	    <p>You have been requested by <em>{{playerName}}</em> to be a coach for the goal: <em>{{goalName}}</em></p>
+	  </div>
+	  <div class="modal-footer">
+	    <button class="btn" data-dismiss="modal" aria-hidden="true">I am not coach material</button>
+	    <button class="btn btn-primary">Accept!</button>
+	  </div>
+	</div>
+	{{/each}}
 </template>
 
 <template name="newGoal">

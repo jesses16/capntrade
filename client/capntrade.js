@@ -3,7 +3,6 @@
 // Define Minimongo collections to match server/publish.js.
 Goals = new Meteor.Collection("goals");
 Services = new Meteor.Collection("services");
-FBData = new Meteor.Collection("fbdata");
 
 Meteor.autosubscribe(function () {
   Meteor.subscribe("userData");
@@ -11,6 +10,35 @@ Meteor.autosubscribe(function () {
 
 if (Meteor.isClient) {
 
+	Meteor.callOnceOnClientLoad = function() {
+		if (Session.get('activeFBRequestId')){
+			return;
+		};
+		$(window).load(function(){
+			var request_id = (RegExp('request_ids' + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+			if (request_id) {
+				Session.set('activeFBRequestId', request_id);
+				window.setTimeout( function() { $('#acceptRequestModal').modal(); } ,1000);
+				console.log("go!");
+			}
+		});
+	}();
+	
+  // Template.acceptRequestModalHidden.preserve('#acceptRequestModal');
+	
+  Template.acceptRequestModalHidden.requestInfo = function() {
+	var FBRequestId = Session.get('activeFBRequestId');
+	var user;
+	var goal = Goals.findOne({coach_fb_request_id: FBRequestId});
+	if (goal) {
+		console.log(goal);
+		user = Meteor.users.findOne({_id: goal.owner}).profile.name		
+		console.log(user);
+		return [{ playerName: user,
+				 goalName: goal.name }];
+	}
+  }
+	
   Template.goals.myGoals = function() {
 	if (Meteor.user()) {
     	return Goals.find({owner: Meteor.userId()});
@@ -28,11 +56,7 @@ if (Meteor.isClient) {
   };
 
   Template.FBPictureProfile.fb_data_image = function (coach_fb_id) {
-	return FBData.findOne({ fb_id: coach_fb_id}).image_url;
-  };
-
-  Template.FBPictureProfile.fb_data_name = function (coach_fb_id) {
-	return FBData.findOne({ fb_id: coach_fb_id}).full_name;
+	return 'http://graph.facebook.com/' + coach_fb_id + '/picture?type=square';
   };
 
   Template.myGoals.events({
@@ -50,29 +74,27 @@ if (Meteor.isClient) {
 	  	message: 'Will you be my coach?',
 	    title: 'Select a Coach',
 		max_recipients: 1
-	  }, function(FB_response) {
-		console.log(FB_response);
-	  	Goals.insert({
-	        name: $('#newGoalForm #name').val(),
-			description: $('#newGoalForm #description').val(),
-			owner: Meteor.userId(),
-	        startDate: d,
-	        points: $('#newGoalForm #points').val(),
-			coach_fb_id: FB_response && FB_response.to[0],
-			coach_fb_request_id: FB_response && FB_response.request
-	     });
-	
-		if (FB_response) {
-			var fb_oauth_token = Meteor.user().services.facebook.accessToken
-			FB.api('/' + FB_response.to[0] + '?access_token=' + fb_oauth_token + '&fields=name,id,picture', function(response) {
-				fb_object = {
-					fb_id: FB_response.to[0],
-					image_url: response.picture.data.url,
-					full_name: response.name
-					};
-				FBData.insert(fb_object);
-			});
-		}
+	  	}, function(FB_response) {
+			console.log(FB_response);
+			
+			if (FB_response) {
+				var coach_name;
+				var fb_oauth_token = Meteor.user().services.facebook.accessToken
+				FB.api('/' + FB_response.to[0] + '?access_token=' + fb_oauth_token + '&fields=name,id,picture', function(response) {
+					coach_name = response.name;
+					
+					Goals.insert({
+				        name: $('#newGoalForm #name').val(),
+						description: $('#newGoalForm #description').val(),
+						owner: Meteor.userId(),
+				        startDate: d,
+				        points: $('#newGoalForm #points').val(),
+						coach_fb_id: FB_response && FB_response.to[0],
+						coach_fb_name: coach_name,
+						coach_fb_request_id: FB_response && FB_response.request
+				    });
+				});
+			}
 	  });
     },
 

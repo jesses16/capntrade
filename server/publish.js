@@ -1,9 +1,11 @@
 // Goals -- {name: String,
 //			 description: String,
-//           points: Number,
 //           owner: oid,
-//			 coaches: [oid],
-//           timestamp: Date}
+//			 startDate: date,
+//           points: Number,
+//			 coach_fb_id: Number,
+//			 coach_fb_name: String,
+//			 coach_fb_request_id: Number}
 Goals = new Meteor.Collection("goals");
 
 // Comments -- {name: String,
@@ -11,12 +13,7 @@ Goals = new Meteor.Collection("goals");
 //           points: Number,
 //           user_id: Number,
 //           timestamp: Date}
-Goals = new Meteor.Collection("comments");
-
-//			 fb_id: Number,
-//			 full_name: String,
-//           image_url: String}
-FBData = new Meteor.Collection("fbdata");
+Comments = new Meteor.Collection("comments");
 
 Meteor.publish("userData", function () {
     return Meteor.users.find({_id: this.userId},
