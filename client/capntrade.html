@@ -109,13 +109,13 @@
 	    </aside>
 	    <div class="span5 offset1">
 	      <h4>Recent Updates</h4>
-	      <hr class="soften hr-thin">
-	      <span>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</span> - 
-	      <em><b>posted by Anon on 1st January, 2012</b></em>
+	      	{{#each messages}}
+				{{> message}}
+			{{/each}}
 	      <hr class="soften hr-thin">
 	      <a href="#">Show more...</a><br/>
 	      <hr class="soften hr-thin">
-	      <input type="text" placeholder="Submit an update to this goal">
+	      <input class="comment_box" type="text" data-goal-id="{{_id}}" placeholder="Submit an update to this goal">
 	    </div>
 	  </header>
 	</div>
@@ -123,6 +123,15 @@
 
 
 <!-- /GOAL ELEMENT -->
+
+<!-- MESSAGE -->
+<template name="message">
+<hr class="soften hr-thin">
+  <span>{{message}}</span> - 
+  <em><b>posted by {{author_fb_name}} on {{date}}</b></em>
+</template>
+<!-- /MESSAGE -->
+
 
 	<!-- FB PICTURE PROFILE -->
 

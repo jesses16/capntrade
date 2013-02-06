@@ -5,7 +5,14 @@
 //           points: Number,
 //			 coach_fb_id: Number,
 //			 coach_fb_name: String,
-//			 coach_fb_request_id: Number}
+//			 coach_fb_request_id: Number
+//           messages: [{
+					// author_fb_id:
+					// author_fb_name:
+					// date:
+					// message:
+				// }]
+			// }
 Goals = new Meteor.Collection("goals");
 
 // Comments -- {name: String,

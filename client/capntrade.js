@@ -63,6 +63,7 @@ if (Meteor.isClient) {
     	return Goals.find({owner: Meteor.userId()});
 	}
   };
+
   Template.coachGoals.goals = function() {
 	if (Meteor.user() && Meteor.user().services) {
     	return Goals.find({ coach_fb_id: { $in:  [Meteor.user().services.facebook.id] }});
@@ -73,9 +74,37 @@ if (Meteor.isClient) {
     return [{pointValue:1},{pointValue:2},{pointValue:3},{pointValue:5},{pointValue:8}];
   };
 
-  Template.FBPictureProfile.fb_data_image = function (coach_fb_id) {
+  Template.FBPictureProfile.fb_data_image = function(coach_fb_id) {
 	return 'http://graph.facebook.com/' + coach_fb_id + '/picture?type=square';
   };
+	// 
+	//   Template.goalElement.messages = function() {
+	// if (Meteor.user() && Meteor.user().services) {
+	//     	return Goals.find({ coach_fb_id: { $in:  [Meteor.user().services.facebook.id] }});
+	// }
+	//   };
+	
+  Template.goalElement.events({
+	'keyup .comment_box' : function(e) {
+		if (e.keyCode === 13) {
+			if (Meteor.user() && Meteor.user().services  && Meteor.user().profile) {
+				var messageText = e.target.value;
+				var goalId = $(e.target).data("goalId");
+				Goals.update( {_id: goalId}, 
+					{ $push: 
+						{ messages : 
+							{   message: messageText, 
+								author_fb_id: Meteor.user().services.facebook.id, 
+								author_fb_name: Meteor.user().profile.name, 
+								date: new Date() 
+							} 
+						} 
+					});
+			}
+
+		}
+	}	
+  });
 
   Template.myGoals.events({
     'click #newGoalButton' : function () {
