@@ -58,15 +58,14 @@ if (Meteor.isClient) {
 	return requestResponse;
   }
 	
-  Template.goals.myGoals = function() {
+  Template.ownerGoals.goals = function() {
 	if (Meteor.user()) {
     	return Goals.find({owner: Meteor.userId()});
 	}
   };
-
-  Template.coachedGoals.coachedGoalSet = function() {
-	if (Meteor.user()) {
-    	return Goals.find({ coaches: { $in:  [Meteor.userId()] }});
+  Template.coachGoals.goals = function() {
+	if (Meteor.user() && Meteor.user().services) {
+    	return Goals.find({ coach_fb_id: { $in:  [Meteor.user().services.facebook.id] }});
 	}
   };
 

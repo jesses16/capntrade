@@ -45,7 +45,7 @@
           <button id="newGoalButton" class="btn btn-success span4"><h2>Create a new goal</h2></button>
             {{> newGoal}}
         </div>
-        {{> goals}}
+        {{> ownerGoals}}
       </div>
     </div>
   </section>
@@ -65,7 +65,7 @@
 		<div class="row">
           <button type="button" class="btn btn-success span4" data-toggle="modal" data-target="#acceptRequestModal"><h2>See Coach Requests</h2></button>
         </div>
-        {{> coachedGoals}}
+        {{> coachGoals}}
       </div>
     </div>
   </section>
@@ -73,36 +73,56 @@
 
 <!-- /COACH MODULE -->
 
-<!-- GOAL ROW -->
+<!-- OWNER GOALS -->
     
-<template name="goals">
-  {{#each myGoals}}
-    <hr class="soften">
-    <div class="row">
-      <header>
-        <img class="span2" src="http://placehold.it/150x150">
-        <aside class="span3">
-          <h2>{{name}}</h2>
-          <em>posted by Anon on {{timestamp}}</em>
-          <p class="tp">{{description}}</p>
-          <hr class="soften hr-thin">
-		  <h6>Coached By</h6>
-		  <p class="fb_picture_profile">{{> FBPictureProfile}}</p>
-        </aside>
-        <div class="span5 offset1">
-          <h4>Recent Updates</h4>
-          <hr class="soften hr-thin">
-          <span>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</span> - 
-          <em><b>posted by Anon on 1st January, 2012</b></em>
-          <hr class="soften hr-thin">
-          <a href="#">Show more...</a><br/>
-          <hr class="soften hr-thin">
-          <input type="text" placeholder="Submit an update to this goal">
-        </div>
-      </header>
-    </div>
+<template name="ownerGoals">
+  {{#each goals}}
+	{{> goalElement}}
   {{/each}}
 </template>
+
+<!-- / OWNER GOALS -->
+
+<!-- COACH GOALS -->
+    
+<template name="coachGoals">
+  {{#each goals}}
+	{{> goalElement}}
+  {{/each}}
+</template>
+
+<!-- / OWNER GOALS -->
+
+<!-- GOAL ELEMENT -->
+<template name="goalElement">
+	<hr class="soften">
+	<div class="row">
+	  <header>
+	    <img class="span2" src="http://placehold.it/150x150">
+	    <aside class="span3">
+	      <h2>{{name}}</h2>
+	      <em>posted by Anon on {{timestamp}}</em>
+	      <p class="tp">{{description}}</p>
+	      <hr class="soften hr-thin">
+		  <h6>Coached By</h6>
+		  <p class="fb_picture_profile">{{> FBPictureProfile}}</p>
+	    </aside>
+	    <div class="span5 offset1">
+	      <h4>Recent Updates</h4>
+	      <hr class="soften hr-thin">
+	      <span>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</span> - 
+	      <em><b>posted by Anon on 1st January, 2012</b></em>
+	      <hr class="soften hr-thin">
+	      <a href="#">Show more...</a><br/>
+	      <hr class="soften hr-thin">
+	      <input type="text" placeholder="Submit an update to this goal">
+	    </div>
+	  </header>
+	</div>
+</template>
+
+
+<!-- /GOAL ELEMENT -->
 
 	<!-- FB PICTURE PROFILE -->
 
@@ -113,34 +133,6 @@
 	<!-- /FB PICTURE PROFILE -->
 
 <!-- /GOAL ROW -->
-
-
-
-<template name="coachedGoals">
-  {{#each coachedGoalSet}}
-    <hr class="soften">
-    <div class="row">
-      <header>
-        <img class="span2" src="http://placehold.it/150x150">
-        <aside class="span3">
-          <h2>{{name}}</h2>
-          <em>posted by Anon on {{timestamp}}</em>
-          <p class="tp">{{description}}</p>
-        </aside>
-        <div class="span5 offset1">
-          <h4>Recent Updates</h4>
-          <hr class="soften hr-thin">
-          <span>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</span> - 
-          <em><b>posted by Anon on 1st January, 2012</b></em>
-          <hr class="soften hr-thin">
-          <a href="#">Show more...</a><br/>
-          <hr class="soften hr-thin">
-          <input type="text" placeholder="Submit an update to this goal">
-        </div>
-      </header>
-    </div>
-  {{/each}}
-</template>
 
 <template name="facebookRequestModalTemplate">
 	<div id="acceptRequestModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
